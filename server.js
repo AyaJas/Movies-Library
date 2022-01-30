@@ -1,5 +1,6 @@
 'use strict';
 
+
 const MovData = require('./Data/data.json');
 
 const express = require('express');
@@ -31,9 +32,6 @@ function handelFavoritePage(req,res){
     return res.status(200).send("Welcome to Favorite Page");
 }
 
-
-
-
 function HandleErrors(req,res){
     let err500 = {
         "status": 500,
@@ -50,7 +48,7 @@ function HandleErrors(req,res){
 
  }
 
-// port = 3000
+
 server.listen(3000,()=>{
     console.log("my server is listining to port 3000");
 })
