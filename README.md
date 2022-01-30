@@ -26,3 +26,7 @@ Add an image of your WRRC here
 - When you write (localhost:3000/) on browser search will get the Homepage of Movies Website.
 - When you write (localhost:3000/favorite) on browser search will get the favorite page of Movies Website.
 - when you write the link with mistakes latter ,will get The 404 error.
+
+
+**Comment**
+### I can't test The error 500
