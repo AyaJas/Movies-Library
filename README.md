@@ -16,7 +16,7 @@ Add an image of your WRRC here
 - write (npm start) command to run the server
 - try this Link (localhost:3000/) to get HomePage
 - try this link (localhost:3000/favorite) to get The Favorite page.
-- once you finished you can pres on ctrl+c to stop the work in the server.
+- once you finished you can press on ctrl+c to stop the work in the server.
 
 
 
@@ -26,3 +26,7 @@ Add an image of your WRRC here
 - When you write (localhost:3000/) on browser search will get the Homepage of Movies Website.
 - When you write (localhost:3000/favorite) on browser search will get the favorite page of Movies Website.
 - when you write the link with mistakes latter ,will get The 404 error.
+
+
+**Comment**
+### I can't test The error 500
