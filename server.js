@@ -41,7 +41,7 @@ function HandleErrors(req,res){
         };
     if(res.status(404))
     {
-    res.status(404).send('page not found error 404')
+        res.status(404).send('page not found error 404')
     }
     else if (res.status(500))
     {
@@ -49,7 +49,6 @@ function HandleErrors(req,res){
     }
 
  }
- 
 
 // port = 3000
 server.listen(3000,()=>{
