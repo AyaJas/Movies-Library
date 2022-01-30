@@ -11,11 +11,12 @@ Add an image of your WRRC here
 ## Getting Started
 <!-- What are the steps that a user must take in order to build this app on their own machine and get it running? -->
 
-- clone The project in the terminal
-- write (npm start) command to start woking in the browser
+- first clone The project in the terminal
+- you have to do npm i to install the required packages
+- write (npm start) command to run the server
 - try this Link (localhost:3000/) to get HomePage
 - try this link (localhost:3000/favorite) to get The Favorite page.
-- once you finished you can pres on ctrl+c to stop the work in the server.
+- once you finished you can press on ctrl+c to stop the work in the server.
 
 
 
