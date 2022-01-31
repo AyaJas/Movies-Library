@@ -22,10 +22,10 @@ function Movies(title, poster_path, overview){
 }
 
 
+
 function handelHomePage(req,res){
-        let mov = MovData.map(val =>{
-            return new Movies (val.title, val.poster_path, val.overview)});
-            return res.status(200).json(mov);
+ let mov = new Movies (MovData.title, MovData.poster_path, MovData.overview);
+ return res.status(200).json(mov);
 }
 
 
