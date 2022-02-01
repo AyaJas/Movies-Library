@@ -1,58 +1,84 @@
 'use strict';
 
-
-const MovData = require('./Data/data.json');
+require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
- 
+const axios = require('axios');
+
+const PORT = process.env.PORT;
+
 const server = express();
 server.use(cors());
 
-server.get('/', handelHomePage )
-server.get('/favorite', handelFavoritePage) //Welcome to Favorite Page
-server.get('*',HandleError404) // 404 Error
-server.get('/*',HandleError500) //500
+
+server.get('/trending', handelTrendingPage)
+server.get('/search', handelSearchMovie)
+server.use('*', HandleError404) // 404 Error
+server.use(HandleError) //500
 
 
-function Movies(title, poster_path, overview){
-   this.title = title;
-   this.poster_path = poster_path;
-   this.overview = overview;
+function Movies(id, title, release_data, poster_path, overview) {
+    this.id = id;
+    this.title = title;
+    this.release_data = release_data;
+    this.poster_path = poster_path;
+    this.overview = overview;
+}
+
+let numberOfMovies = 2;
+let url = `https://api.themoviedb.org/3/trending/all/week?api_key=${process.env.APIKEY}`;
+
+
+function handelTrendingPage(req, res) {
+    axios.get(url)
+        .then((resultOf) => {
+            let result = resultOf.data.results;
+            let moviesOf = result.map(movie => {
+                return new Movies(movie.id, movie.title, movie.release_date, movie.poster_path, movie.overview);
+            })
+            res.status(200).json(moviesOf);
+        }).catch((err) => {
+            console.log("Error");
+        })
+}
+
+let movie1 = "Riverdance: The Animated Adventure";
+let movie2 = "The Hobbit: The Battle of the Five Armies";
+function handelSearchMovie(req, res) {
+    let urlS = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&number=${numberOfMovies}&query=${movie1}`;
+    axios.get(urlS)
+        .then((resultOf) => {
+            let result = resultOf.data.results;
+            let moviesOf = result.map(movie => {
+                return new Movies(movie.id, movie.original_title, movie.release_date, movie.poster_path, movie.overview);
+            })
+            res.status(200).json(moviesOf);
+        }).catch((err) => {
+            console.log("Error");
+        })
+}
+
+function HandleError404(req, res) {
+
+    res.status(404).send('page not found error 404')
+
+
 }
 
 
-
-function handelHomePage(req,res){
- let mov = new Movies (MovData.title, MovData.poster_path, MovData.overview);
- return res.status(200).json(mov);
-}
-
-
-function handelFavoritePage(req,res){
-    return res.status(200).send("Welcome to Favorite Page");
-}
-
-function HandleError404(req,res){
-  
-        res.status(404).send('page not found error 404')
-    
-
- }
-
- // I can't test this error 
- function HandleError500(req,res){
-    let err500 = {
+function HandleError(error, req, res) {
+    const err500 = {
         "status": 500,
         "responseText": "Sorry, something went wrong"
-        };
-        res.status(500).send(err500);
+    }
+    res.status(500).send(err500);
 
- }
+}
 
 
-server.listen(3000,()=>{
-    console.log("my server is listining to port 3000");
+server.listen(PORT, () => {
+    console.log(`my server is listining to port ${PORT}`);
 })
 
 
