@@ -24,6 +24,10 @@ server.get('/search', handelSearchMovie)
 server.post('/addMovie', handelAddMovie)
 server.get('/getMovies', handelGetMovies)
 
+server.put('/UPDATE/:id',updateMoviesHandler);
+server.delete('/DELETE/:id',deleteMoviesHandler);
+server.get('/getMovie/:id',getspecificMovies);
+
 
 server.use('*', HandleError404) // 404 Error
 server.use(HandleError) //500
@@ -92,7 +96,45 @@ function handelGetMovies(req,res){
     client.query(sql).then(data=>{
        res.status(200).json(data.rows);
     }).catch(error=>{
-        errorHandler(error,req,res)
+        HandleError(error,req,res)
+    });
+}
+
+
+function updateMoviesHandler (req,res){
+    const id = req.params.id;
+    console.log(req.params.id);
+    const movie = req.body;
+    const sql = `UPDATE favMovies SET title =$1, release_date = $2, poster_path = $3 ,overview = $4 WHERE id=$5 RETURNING *;`; 
+    let values=[movie.title,movie.release_date,movie.poster_path,movie.overview,id];
+    client.query(sql,values).then(data=>{
+        res.status(200).json(data.rows);
+        // res.status(204)
+    }).catch(error=>{
+        HandleError(error,req,res)
+    });
+}
+
+
+function deleteMoviesHandler(req,res){
+    const id = req.params.id;
+    const sql = `DELETE FROM favMovies WHERE id=${id};` 
+    client.query(sql).then(()=>{
+        res.status(200).send("The Movie has been deleted");
+    }).catch(error=>{
+        HandleError(error,req,res)
+    });
+}
+
+
+
+function getspecificMovies(req,res){
+    const id = req.params.id;
+    let sql = `SELECT * FROM favMovies WHERE id = ${id} ;`;
+    client.query(sql).then(data=>{
+       res.status(200).json(data.rows[0]);
+    }).catch(error=>{
+        HandleError(error,req,res)
     });
 }
 
@@ -117,4 +159,3 @@ client.connect().then(()=>{
         console.log(`My Server is listining to port ${PORT}`)
     })
 })
-
