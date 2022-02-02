@@ -1,4 +1,4 @@
-# Movies-Library - Version 1
+# Movies-Library - Version 3
 
 **Author Name**: Ayah Hameedat
 
@@ -12,7 +12,7 @@
 
 - First clone The project in the terminal
 - you have to do npm i to install the required packages
-- Install the required packages for this task: npm install axios dotenv.
+- Install the required packages for this task: npm install axios dotenv and npm install pg
 - write (npm start) command to run the server
 - try this Link (localhost:3000/trending) to get The trending movies page.
 - try this link (localhost:3000/search) to get The search page to watch favorite movies you want .
@@ -28,3 +28,4 @@
 - when you write the link with mistakes latter ,will get The 404 error.
 
 
+# There are some issues I faced, I'll resubmit as soon as possible.

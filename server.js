@@ -5,23 +5,34 @@ require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const axios = require('axios');
+//initialize pg
+const pg = require('pg');
+
+// create DB
+const client = new pg.Client(process.env.DATABASE_URL);
+
 
 const PORT = process.env.PORT;
 
 const server = express();
 server.use(cors());
+server.use(express.json());
 
 
 server.get('/trending', handelTrendingPage)
 server.get('/search', handelSearchMovie)
+server.post('/addMovie', handelAddMovie)
+server.get('/getMovies', handelGetMovies)
+
+
 server.use('*', HandleError404) // 404 Error
 server.use(HandleError) //500
 
 
-function Movies(id, title, release_data, poster_path, overview) {
+function Movies(id, title, release_date, poster_path, overview) {
     this.id = id;
     this.title = title;
-    this.release_data = release_data;
+    this.release_date = release_date;
     this.poster_path = poster_path;
     this.overview = overview;
 }
@@ -59,11 +70,36 @@ function handelSearchMovie(req, res) {
         })
 }
 
+
+function handelAddMovie(req,res){
+    const movie = req.body;
+    //console.log(movie);
+    console.log("anything");
+    let sql = `INSERT INTO favMovies(title,release_date,poster_path,overview) VALUES ($1,$2,$3,$4) RETURNING *;`
+    let values=[movie.title,movie.release_date,movie.poster_path,movie.overview];
+    console.log(values);
+    client.query(sql,values).then(data => {
+        // console.log("anything");
+        res.status(200).json(data);
+    }).catch(error =>{
+        HandleError(error, req, res)
+    });
+}
+
+
+function handelGetMovies(req,res){
+    let sql = `SELECT * FROM favMovies;`;
+    client.query(sql).then(data=>{
+       res.status(200).json(data.rows);
+    }).catch(error=>{
+        errorHandler(error,req,res)
+    });
+}
+
+
 function HandleError404(req, res) {
 
     res.status(404).send('page not found error 404')
-
-
 }
 
 
@@ -76,9 +112,9 @@ function HandleError(error, req, res) {
 
 }
 
-
-server.listen(PORT, () => {
-    console.log(`my server is listining to port ${PORT}`);
+client.connect().then(()=>{
+    server.listen(PORT,()=>{
+        console.log(`My Server is listining to port ${PORT}`)
+    })
 })
-
 
