@@ -14,6 +14,7 @@ const client = new pg.Client({
     ssl: { rejectUnauthorized: false }
 });
 
+
 const PORT = process.env.PORT;
 
 
@@ -137,7 +138,6 @@ function handelAddMovie(req, res) {
     let values = [movie.title, movie.release_date, movie.poster_path, movie.overview];
     console.log(values);
     client.query(sql, values).then(data => {
-        // console.log("anything");
         res.status(200).json(data);
     }).catch(error => {
         HandleError(error, req, res)
