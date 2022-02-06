@@ -7,12 +7,22 @@ const cors = require('cors');
 const axios = require('axios');
 const pg = require('pg');
 
+
 const client = new pg.Client(process.env.DATABASE_URL);
 
 // const client = new pg.Client({
 //     connectionString: process.env.DATABASE_URL,
 //     ssl: { rejectUnauthorized: false }
 // });
+
+// const client = new pg.Client(process.env.DATABASE_URL);
+
+const client = new pg.Client({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
+});
+
+
 
 const PORT = process.env.PORT;
 
@@ -21,7 +31,13 @@ const server = express();
 server.use(cors());
 server.use(express.json());
 
+
 const MovData = require('./Data/data.json');
+
+
+
+const MovData = require('./Data/data.json');
+
 
 server.get('/', handelHomePage)
 
@@ -34,6 +50,7 @@ server.get('/search', handelSearchMovie)
 server.post('/addMovie', handelAddMovie)
 
 server.get('/getMovies', handelGetMovies)
+
 
 // routes Task 9
 server.get('/getCertification', handelGetCertification)
@@ -128,6 +145,13 @@ function handelSearchMovie(req, res) {
 
 
 
+/* 4 routes from Task12 requierments */
+let route1 = "https://api.themoviedb.org/4/list/3?page=1&api_key=2b654cd49b2434078521e68e249176e7";
+let route2 = "https://api.themoviedb.org/3/company/2?api_key=2b654cd49b2434078521e68e249176e7";
+let route3 = "https://api.themoviedb.org/3/movie/25?api_key=2b654cd49b2434078521e68e249176e7&language=en-US";
+let route4 = "https://api.themoviedb.org/3/movie/250?api_key=2b654cd49b2434078521e68e249176e7&language=en-US";
+
+
 
 
 //route 1 - Task 12
@@ -167,6 +191,7 @@ axios.get(URLGenre)
 
 
 
+
 function handelAddMovie(req, res) {
     const movie = req.body;
     //console.log(movie);
@@ -175,7 +200,10 @@ function handelAddMovie(req, res) {
     let values = [movie.title, movie.release_date, movie.poster_path, movie.overview];
     console.log(values);
     client.query(sql, values).then(data => {
+
         // console.log("anything");
+
+      
         res.status(200).json(data);
     }).catch(error => {
         HandleError(error, req, res)
