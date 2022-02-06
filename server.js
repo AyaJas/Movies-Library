@@ -7,13 +7,12 @@ const cors = require('cors');
 const axios = require('axios');
 const pg = require('pg');
 
-// const client = new pg.Client(process.env.DATABASE_URL);
+const client = new pg.Client(process.env.DATABASE_URL);
 
-const client = new pg.Client({
-    connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
-});
-
+// const client = new pg.Client({
+//     connectionString: process.env.DATABASE_URL,
+//     ssl: { rejectUnauthorized: false }
+// });
 
 const PORT = process.env.PORT;
 
@@ -107,7 +106,7 @@ let movie2 = "The Hobbit: The Battle of the Five Armies";
 
 
 function handelSearchMovie(req, res) {
-    let urlS = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&number=${numberOfMovies}&query=${movie1}`;
+    let urlS = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.APIKEY}&number=${numberOfMovies}`;
     axios.get(urlS)
         .then((resultOf) => {
             let result = resultOf.data.results;
@@ -138,6 +137,7 @@ function handelAddMovie(req, res) {
     let values = [movie.title, movie.release_date, movie.poster_path, movie.overview];
     console.log(values);
     client.query(sql, values).then(data => {
+        // console.log("anything");
         res.status(200).json(data);
     }).catch(error => {
         HandleError(error, req, res)
